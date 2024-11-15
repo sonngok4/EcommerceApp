@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Product Admin - Dashboard HTML Template</title>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700">
+        <!-- https://fonts.google.com/specimen/Roboto -->
+        <link rel="stylesheet" href="admin/css/fontawesome.min.css">
+        <!-- https://fontawesome.com/ -->
+        <link rel="stylesheet" href="admin/css/bootstrap.min.css">
+        <!-- https://getbootstrap.com/ -->
+        <link rel="stylesheet" href="admin/css/templatemo-style.css">
+        <!-- Product Admin CSS Template https://templatemo.com/tm-524-product-admin -->
+    </head>
+    
+
+    <body>
+        <!-- Header -->
+        <header th:replace="admin/fragments/header :: header"></header>
+
+        <!-- Content section -->
+        <main>
+            <div layout:fragment="content">
+                <!-- Nội dung của từng trang sẽ được chèn vào đây -->
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer th:replace="admin/fragments/footer :: footer"></footer>
+
+        <!-- Scripts chung -->
+        <script src="admin/js/jquery-3.3.1.min.js"></script>
+        <!-- https://jquery.com/download/ -->
+        <script src="admin/js/moment.min.js"></script>
+        <!-- https://momentjs.com/ -->
+        <script src="admin/js/Chart.min.js"></script>
+        <!-- http://www.chartjs.org/docs/latest/ -->
+        <script src="admin/js/bootstrap.min.js"></script>
+        <!-- https://getbootstrap.com/ -->
+        <script src="admin/js/tooplate-scripts.js"></script>
+
+        <!-- Chỗ để các trang con thêm script riêng -->
+        <th:block layout:fragment="scripts"></th:block>
+    </body>
+
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layouts/main-layout}">
+
+    <head>
+        <title>Trang chủ</title>
+    </head>
+
+    <body>
+        <!-- Chỉ cần định nghĩa phần content -->
+        <div layout:fragment="content">
+            <h1>Nội dung trang chủ</h1>
+            <p>Đây là nội dung chính của trang web.</p>
+            <button style="border: 0;">Click</button>
+        </div>
+
+        <!-- Nếu cần thêm script riêng cho trang -->
+        <th:block layout:fragment="scripts">
+            <script>
+                // Script riêng của trang chủ
+            </script>
+        </th:block>
+    </body>
+
+</html>
