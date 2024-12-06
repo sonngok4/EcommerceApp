@@ -1,0 +1,110 @@
+/* Sidebar Main Container */
+.sidebar {
+    background-color: transparent;
+    padding: 20px;
+    height: 100%;
+}
+
+/* Sidebar Sections */
+.sidebar-section {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+}
+
+.sidebar-section:last-child {
+    border-bottom: none;
+}
+
+/* Section Headings */
+.sidebar-section h4 {
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #007bff;
+}
+
+/* Checkbox Styling */
+.form-check {
+    margin-bottom: 10px;
+}
+
+.form-check-input {
+    margin-right: 10px;
+}
+
+.form-check-label {
+    color: #666;
+}
+
+/* Price Range Input */
+.input-group {
+    margin-top: 10px;
+}
+
+.input-group .form-control {
+    border-radius: 0;
+}
+
+/* Sort Select Styling */
+.form-select {
+    width: 100%;
+    margin-top: 10px;
+}
+
+/* Display and View Mode Buttons */
+.btn-group {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.btn-group .btn {
+    width: 33.33%;
+}
+
+/* Apply Filters Button */
+#applyFilters {
+    margin-top: 20px;
+    background-color: #007bff;
+    border-color: #007bff;
+    transition: all 0.3s ease;
+}
+
+#applyFilters:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .sidebar {
+        border-right: none;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .sidebar-section {
+        margin-bottom: 15px;
+    }
+}
+
+/* Hover and Focus States */
+.form-check-input:checked {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.form-check-input:focus {
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Accessibility Improvements */
+.form-check-input:focus + .form-check-label {
+    color: #007bff;
+}
+
+/* Smooth Transitions */
+.sidebar-section,
+.form-check-input,
+#applyFilters {
+    transition: all 0.3s ease;
+}

@@ -1,25 +1,98 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<!-- <!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
     layout:decorate="~{layouts/main-layout}">
 
     <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Trang chủ</title>
+
     </head>
 
-    <body>
-        <!-- Chỉ cần định nghĩa phần content -->
-        <div layout:fragment="content">
+    <body> -->
+<!-- Chỉ cần định nghĩa phần content -->
+<!-- <div layout:fragment="content">
             <h1>Nội dung trang chủ</h1>
             <p>Đây là nội dung chính của trang web.</p>
-            <button style="border: 0;">Click</button>
-        </div>
+            <button type="button">Click</button>
+        </div> -->
 
-        <!-- Nếu cần thêm script riêng cho trang -->
-        <th:block layout:fragment="scripts">
+<!-- Nếu cần thêm script riêng cho trang -->
+<!-- <th:block layout:fragment="scripts">
             <script>
                 // Script riêng của trang chủ
             </script>
         </th:block>
+    </body>
+
+</html> -->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Thêm Sản Phẩm Mới</title>
+    </head>
+
+    <body>
+        <div class="container">
+            <h2>Thêm Sản Phẩm Mới</h2>
+
+            <!-- Hiển thị thông báo lỗi -->
+            <div th:if="${param.success}" class="alert alert-success">
+                Thêm sản phẩm thành công!
+            </div>
+
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}">
+            </div>
+
+            <!-- Form thêm sản phẩm -->
+            <form th:action="@{/admin/add-product}" th:object="${product}" method="post" enctype="multipart/form-data">
+
+                <!-- Tên sản phẩm -->
+                <div class="form-group">
+                    <label for="name">Tên Sản Phẩm</label>
+                    <input type="text" class="form-control" id="name" th:field="*{name}" required>
+                    <small th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger">
+                    </small>
+                </div>
+
+                <!-- Mô tả sản phẩm -->
+                <div class="form-group">
+                    <label for="description">Mô Tả</label>
+                    <textarea class="form-control" id="description" th:field="*{description}">
+                </textarea>
+                </div>
+
+                <!-- Giá sản phẩm -->
+                <div class="form-group">
+                    <label for="price">Giá</label>
+                    <input type="number" class="form-control" id="price" th:field="*{price}" step="0.01" required>
+                    <small th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="text-danger">
+                    </small>
+                </div>
+
+                <!-- Danh mục -->
+                <div class="form-group">
+                    <label for="categoryId">Danh Mục</label>
+                    <select class="form-control" id="categoryId" th:field="*{categoryId}" required>
+                        <option value="">Chọn Danh Mục</option>
+                        <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.categoryName}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Upload ảnh -->
+                <div class="form-group">
+                    <label for="imageFile">Ảnh Sản Phẩm</label>
+                    <input type="file" class="form-control-file" id="imageFile" name="imageFile" accept="image/*">
+                </div>
+
+                <!-- Nút submit -->
+                <button type="submit" class="btn btn-primary">Thêm Sản Phẩm</button>
+            </form>
+        </div>
     </body>
 
 </html>

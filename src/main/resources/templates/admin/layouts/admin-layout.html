@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title th:replace="${title}">Admin Dashboard</title>
+        <link rel="stylesheet" href="/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/css/admin.css">
+    </head>
+
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar -->
+                <nav class="d-md-block bg-light col-md-2 sidebar">
+                    <div class="sidebar-sticky">
+                        <ul class="flex-column nav">
+                            <li class="nav-item">
+                                <a class="nav-link" href="/admin/dashboard">Dashboard</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/admin/categories">Danh Mục</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/admin/products">Sản Phẩm</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/admin/orders">Đơn Hàng</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/admin/users">Người Dùng</a>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+
+                <!-- Main Content -->
+                <main role="main" class="ml-sm-auto px-4 col-md-10">
+                    <div th:replace="${content}">
+                        Nội dung trang
+                    </div>
+                </main>
+            </div>
+        </div>
+
+        <script src="/js/bootstrap.bundle.min.js"></script>
+    </body>
+
+</html>

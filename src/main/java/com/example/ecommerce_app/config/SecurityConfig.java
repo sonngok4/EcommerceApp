@@ -52,14 +52,16 @@ public class SecurityConfig {
                 // Set session management to stateless
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .authenticationProvider(authenticationProvider()) // Thêm dòng này   
+                .authenticationProvider(authenticationProvider()) // Thêm dòng này
 
                 // Set permissions on endpoints
                 .authorizeHttpRequests(auth -> auth
                         // Our public endpoints
+                        .requestMatchers("/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/public/**").permitAll()
                         .requestMatchers("/api/**").permitAll() // Thêm dòng này
+                        .requestMatchers("/admin/**").authenticated() // Thêm dòng này
                         // Our private endpoints
                         .anyRequest().permitAll()) // đã sửa authenticated
 

@@ -37,6 +37,7 @@ public class UserService {
                 userDTO.getFirstName(),
                 userDTO.getLastName(),
                 userDTO.getEmail(),
+                userDTO.getUsername(),
                 passwordEncoder.encode(userDTO.getPassword()));
 
         // Thêm ROLE_USER mặc định
@@ -107,5 +108,9 @@ public class UserService {
 
     public void delete(Long id) {
         userRepository.deleteById(id);
+    }
+
+    public User getUserByUsername(String name) {
+        return userRepository.findByUsername(name).orElseThrow(() -> new RuntimeException("User not found"));
     }
 }

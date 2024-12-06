@@ -13,6 +13,7 @@ public class EcommerceAppApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(EcommerceAppApplication.class, args);
+		System.out.println("Server started at http://localhost:8080/");
 	}
 
 	@GetMapping("")
@@ -27,7 +28,7 @@ public class EcommerceAppApplication {
 
 	@GetMapping("/about")
 	public String about() {
-		return "about";
+		return "pages/about";
 	}
 
 	@GetMapping("/detail")
@@ -48,6 +49,16 @@ public class EcommerceAppApplication {
 	@GetMapping("/contact")
 	public String contact() {
 		return "pages/contact";
+	}
+
+	@GetMapping("/services")
+	public String service() {
+		return "pages/services";
+	}
+
+	@GetMapping("/blog")
+	public String blog() {
+		return "pages/blog";
 	}
 
 }

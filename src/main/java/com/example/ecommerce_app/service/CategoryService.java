@@ -23,6 +23,10 @@ public class CategoryService {
                 .orElseThrow(() -> new RuntimeException("Category not found"));
     }
 
+    public Category findByCategoryName(String categoryName) {
+        return categoryRepository.findByCategoryName(categoryName);
+    }
+
     public boolean isCategoryNameUnique(String categoryName) {
         return categoryRepository.findByCategoryName(categoryName) == null;
     }
@@ -37,5 +41,9 @@ public class CategoryService {
 
     public void delete(Long id) {
         categoryRepository.deleteById(id);
+    }
+
+    public Object getAllCategories() {
+        return categoryRepository.findAll();
     }
 }

@@ -1,219 +1,365 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
     layout:decorate="~{layouts/main-layout}">
 
     <head>
-        <title>MultiShop - Online Shop Website Template</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Furni - Furniture and Interior Design</title>
     </head>
-
 
     <body>
         <div layout:fragment="content">
+            <!-- Start Hero Section -->
+            <div class="hero">
+                <div class="container">
+                    <div class="justify-content-between row">
+                        <div class="col-lg-5">
+                            <div class="intro-excerpt">
+                                <h1>Checkout</h1>
+                            </div>
+                        </div>
+                        <div class="col-lg-7">
 
-            <!-- Breadcrumb Start -->
-            <div class="container-fluid">
-                <div class="row px-xl-5">
-                    <div class="col-12">
-                        <nav class="breadcrumb bg-light mb-30">
-                            <a class="breadcrumb-item text-dark" href="#">Home</a>
-                            <a class="breadcrumb-item text-dark" href="#">Shop</a>
-                            <span class="breadcrumb-item active">Checkout</span>
-                        </nav>
+                        </div>
                     </div>
                 </div>
             </div>
-            <!-- Breadcrumb End -->
+            <!-- End Hero Section -->
 
-
-            <!-- Checkout Start -->
-            <div class="container-fluid">
-                <div class="row px-xl-5">
-                    <div class="col-lg-8">
-                        <h5 class="section-title position-relative text-uppercase mb-3"><span
-                                class="bg-secondary pr-3">Billing Address</span></h5>
-                        <div class="bg-light p-30 mb-5">
-                            <div class="row">
-                                <div class="col-md-6 form-group">
-                                    <label>First Name</label>
-                                    <input class="form-control" type="text" placeholder="John">
-                                </div>
-                                <div class="col-md-6 form-group">
-                                    <label>Last Name</label>
-                                    <input class="form-control" type="text" placeholder="Doe">
-                                </div>
-                                <div class="col-md-6 form-group">
-                                    <label>E-mail</label>
-                                    <input class="form-control" type="text" placeholder="example@email.com">
-                                </div>
-                                <div class="col-md-6 form-group">
-                                    <label>Mobile No</label>
-                                    <input class="form-control" type="text" placeholder="+123 456 789">
-                                </div>
-                                <div class="col-md-6 form-group">
-                                    <label>Address Line 1</label>
-                                    <input class="form-control" type="text" placeholder="123 Street">
-                                </div>
-                                <div class="col-md-6 form-group">
-                                    <label>Address Line 2</label>
-                                    <input class="form-control" type="text" placeholder="123 Street">
-                                </div>
-                                <div class="col-md-6 form-group">
-                                    <label>Country</label>
-                                    <select class="custom-select" title="Select Country">
-                                        <option selected>United States</option>
-                                        <option>Afghanistan</option>
-                                        <option>Albania</option>
-                                        <option>Algeria</option>
+            <div class="untree_co-section">
+                <div class="container">
+                    <div class="mb-5 row">
+                        <div class="col-md-12">
+                            <div class="p-4 border rounded" role="alert">
+                                Returning customer? <a href="#">Click here</a> to login
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="mb-5 mb-md-0 col-md-6">
+                            <h2 class="mb-3 text-black h3">Billing Details</h2>
+                            <div class="bg-white p-3 p-lg-5 border">
+                                <div class="form-group">
+                                    <label for="c_country" class="text-black">Country <span
+                                            class="text-danger">*</span></label>
+                                    <select id="c_country" class="form-control">
+                                        <option value="1">Select a country</option>
+                                        <option value="2">bangladesh</option>
+                                        <option value="3">Algeria</option>
+                                        <option value="4">Afghanistan</option>
+                                        <option value="5">Ghana</option>
+                                        <option value="6">Albania</option>
+                                        <option value="7">Bahrain</option>
+                                        <option value="8">Colombia</option>
+                                        <option value="9">Dominican Republic</option>
                                     </select>
                                 </div>
-                                <div class="col-md-6 form-group">
-                                    <label>City</label>
-                                    <input class="form-control" type="text" placeholder="New York">
-                                </div>
-                                <div class="col-md-6 form-group">
-                                    <label>State</label>
-                                    <input class="form-control" type="text" placeholder="New York">
-                                </div>
-                                <div class="col-md-6 form-group">
-                                    <label>ZIP Code</label>
-                                    <input class="form-control" type="text" placeholder="123">
-                                </div>
-                                <div class="col-md-12 form-group">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="newaccount">
-                                        <label class="custom-control-label" for="newaccount">Create an account</label>
+                                <div class="form-group row">
+                                    <div class="col-md-6">
+                                        <label for="c_fname" class="text-black">First Name <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="c_fname" name="c_fname">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="c_lname" class="text-black">Last Name <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="c_lname" name="c_lname">
                                     </div>
                                 </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-12">
+                                        <label for="c_companyname" class="text-black">Company Name </label>
+                                        <input type="text" class="form-control" id="c_companyname" name="c_companyname">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-12">
+                                        <label for="c_address" class="text-black">Address <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="c_address" name="c_address"
+                                            placeholder="Street address">
+                                    </div>
+                                </div>
+
+                                <div class="mt-3 form-group">
+                                    <input type="text" class="form-control"
+                                        placeholder="Apartment, suite, unit etc. (optional)">
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-md-6">
+                                        <label for="c_state_country" class="text-black">State / Country <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="c_state_country"
+                                            name="c_state_country">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="c_postal_zip" class="text-black">Posta / Zip <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="c_postal_zip" name="c_postal_zip">
+                                    </div>
+                                </div>
+
+                                <div class="mb-5 form-group row">
+                                    <div class="col-md-6">
+                                        <label for="c_email_address" class="text-black">Email Address <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="c_email_address"
+                                            name="c_email_address">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="c_phone" class="text-black">Phone <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="c_phone" name="c_phone"
+                                            placeholder="Phone Number">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="c_create_account" class="text-black" data-bs-toggle="collapse"
+                                        href="#create_an_account" role="button" aria-expanded="false"
+                                        aria-controls="create_an_account"><input type="checkbox" value="1"
+                                            id="c_create_account"> Create an account?</label>
+                                    <div class="collapse" id="create_an_account">
+                                        <div class="mb-4 py-2">
+                                            <p class="mb-3">Create an account by entering the information below. If you
+                                                are
+                                                a returning customer please login at the top of the page.</p>
+                                            <div class="form-group">
+                                                <label for="c_account_password" class="text-black">Account
+                                                    Password</label>
+                                                <input type="email" class="form-control" id="c_account_password"
+                                                    name="c_account_password" placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label for="c_ship_different_address" class="text-black" data-bs-toggle="collapse"
+                                        href="#ship_different_address" role="button" aria-expanded="false"
+                                        aria-controls="ship_different_address"><input type="checkbox" value="1"
+                                            id="c_ship_different_address"> Ship To A Different Address?</label>
+                                    <div class="collapse" id="ship_different_address">
+                                        <div class="py-2">
+
+                                            <div class="form-group">
+                                                <label for="c_diff_country" class="text-black">Country <span
+                                                        class="text-danger">*</span></label>
+                                                <select id="c_diff_country" class="form-control">
+                                                    <option value="1">Select a country</option>
+                                                    <option value="2">bangladesh</option>
+                                                    <option value="3">Algeria</option>
+                                                    <option value="4">Afghanistan</option>
+                                                    <option value="5">Ghana</option>
+                                                    <option value="6">Albania</option>
+                                                    <option value="7">Bahrain</option>
+                                                    <option value="8">Colombia</option>
+                                                    <option value="9">Dominican Republic</option>
+                                                </select>
+                                            </div>
+
+
+                                            <div class="form-group row">
+                                                <div class="col-md-6">
+                                                    <label for="c_diff_fname" class="text-black">First Name <span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" id="c_diff_fname"
+                                                        name="c_diff_fname">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="c_diff_lname" class="text-black">Last Name <span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" id="c_diff_lname"
+                                                        name="c_diff_lname">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <div class="col-md-12">
+                                                    <label for="c_diff_companyname" class="text-black">Company Name
+                                                    </label>
+                                                    <input type="text" class="form-control" id="c_diff_companyname"
+                                                        name="c_diff_companyname">
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3 form-group row">
+                                                <div class="col-md-12">
+                                                    <label for="c_diff_address" class="text-black">Address <span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" id="c_diff_address"
+                                                        name="c_diff_address" placeholder="Street address">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <input type="text" class="form-control"
+                                                    placeholder="Apartment, suite, unit etc. (optional)">
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <div class="col-md-6">
+                                                    <label for="c_diff_state_country" class="text-black">State / Country
+                                                        <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" id="c_diff_state_country"
+                                                        name="c_diff_state_country">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="c_diff_postal_zip" class="text-black">Posta / Zip <span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" id="c_diff_postal_zip"
+                                                        name="c_diff_postal_zip">
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-5 form-group row">
+                                                <div class="col-md-6">
+                                                    <label for="c_diff_email_address" class="text-black">Email Address
+                                                        <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" id="c_diff_email_address"
+                                                        name="c_diff_email_address">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="c_diff_phone" class="text-black">Phone <span
+                                                            class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" id="c_diff_phone"
+                                                        name="c_diff_phone" placeholder="Phone Number">
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="c_order_notes" class="text-black">Order Notes</label>
+                                    <textarea name="c_order_notes" id="c_order_notes" cols="30" rows="5"
+                                        class="form-control" placeholder="Write your notes here..."></textarea>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+
+                            <div class="mb-5 row">
                                 <div class="col-md-12">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="shipto">
-                                        <label class="custom-control-label" for="shipto" data-toggle="collapse"
-                                            data-target="#shipping-address">Ship to different address</label>
+                                    <h2 class="mb-3 text-black h3">Coupon Code</h2>
+                                    <div class="bg-white p-3 p-lg-5 border">
+
+                                        <label for="c_code" class="mb-3 text-black">Enter your coupon code if you have
+                                            one</label>
+                                        <div class="w-75 couponcode-wrap input-group">
+                                            <input type="text" class="form-control me-2" id="c_code"
+                                                placeholder="Coupon Code" aria-label="Coupon Code"
+                                                aria-describedby="button-addon2">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-black btn-sm" type="button"
+                                                    id="button-addon2">Apply</button>
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="collapse mb-5" id="shipping-address">
-                            <h5 class="section-title position-relative text-uppercase mb-3"><span
-                                    class="bg-secondary pr-3">Shipping Address</span></h5>
-                            <div class="bg-light p-30">
-                                <div class="row">
-                                    <div class="col-md-6 form-group">
-                                        <label>First Name</label>
-                                        <input class="form-control" type="text" placeholder="John">
-                                    </div>
-                                    <div class="col-md-6 form-group">
-                                        <label>Last Name</label>
-                                        <input class="form-control" type="text" placeholder="Doe">
-                                    </div>
-                                    <div class="col-md-6 form-group">
-                                        <label>E-mail</label>
-                                        <input class="form-control" type="text" placeholder="example@email.com">
-                                    </div>
-                                    <div class="col-md-6 form-group">
-                                        <label>Mobile No</label>
-                                        <input class="form-control" type="text" placeholder="+123 456 789">
-                                    </div>
-                                    <div class="col-md-6 form-group">
-                                        <label>Address Line 1</label>
-                                        <input class="form-control" type="text" placeholder="123 Street">
-                                    </div>
-                                    <div class="col-md-6 form-group">
-                                        <label>Address Line 2</label>
-                                        <input class="form-control" type="text" placeholder="123 Street">
-                                    </div>
-                                    <div class="col-md-6 form-group">
-                                        <label>Country</label>
-                                        <select class="custom-select" title="Select Country">
-                                            <option selected>United States</option>
-                                            <option>Afghanistan</option>
-                                            <option>Albania</option>
-                                            <option>Algeria</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6 form-group">
-                                        <label>City</label>
-                                        <input class="form-control" type="text" placeholder="New York">
-                                    </div>
-                                    <div class="col-md-6 form-group">
-                                        <label>State</label>
-                                        <input class="form-control" type="text" placeholder="New York">
-                                    </div>
-                                    <div class="col-md-6 form-group">
-                                        <label>ZIP Code</label>
-                                        <input class="form-control" type="text" placeholder="123">
+
+                            <div class="mb-5 row">
+                                <div class="col-md-12">
+                                    <h2 class="mb-3 text-black h3">Your Order</h2>
+                                    <div class="bg-white p-3 p-lg-5 border">
+                                        <table class="site-block-order-table mb-5 table">
+                                            <thead>
+                                                <th>Product</th>
+                                                <th>Total</th>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Top Up T-Shirt <strong class="mx-2">x</strong> 1</td>
+                                                    <td>$250.00</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Polo Shirt <strong class="mx-2">x</strong> 1</td>
+                                                    <td>$100.00</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="font-weight-bold text-black"><strong>Cart
+                                                            Subtotal</strong>
+                                                    </td>
+                                                    <td class="text-black">$350.00</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="font-weight-bold text-black"><strong>Order Total</strong>
+                                                    </td>
+                                                    <td class="font-weight-bold text-black"><strong>$350.00</strong>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                        <div class="mb-3 p-3 border">
+                                            <h3 class="mb-0 h6"><a class="d-block" data-bs-toggle="collapse"
+                                                    href="#collapsebank" role="button" aria-expanded="false"
+                                                    aria-controls="collapsebank">Direct Bank Transfer</a></h3>
+
+                                            <div class="collapse" id="collapsebank">
+                                                <div class="py-2">
+                                                    <p class="mb-0">Make your payment directly into our bank account.
+                                                        Please
+                                                        use your Order ID as the payment reference. Your order won’t be
+                                                        shipped until the funds have cleared in our account.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-3 p-3 border">
+                                            <h3 class="mb-0 h6"><a class="d-block" data-bs-toggle="collapse"
+                                                    href="#collapsecheque" role="button" aria-expanded="false"
+                                                    aria-controls="collapsecheque">Cheque Payment</a></h3>
+
+                                            <div class="collapse" id="collapsecheque">
+                                                <div class="py-2">
+                                                    <p class="mb-0">Make your payment directly into our bank account.
+                                                        Please
+                                                        use your Order ID as the payment reference. Your order won’t be
+                                                        shipped until the funds have cleared in our account.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-5 p-3 border">
+                                            <h3 class="mb-0 h6"><a class="d-block" data-bs-toggle="collapse"
+                                                    href="#collapsepaypal" role="button" aria-expanded="false"
+                                                    aria-controls="collapsepaypal">Paypal</a></h3>
+
+                                            <div class="collapse" id="collapsepaypal">
+                                                <div class="py-2">
+                                                    <p class="mb-0">Make your payment directly into our bank account.
+                                                        Please
+                                                        use your Order ID as the payment reference. Your order won’t be
+                                                        shipped until the funds have cleared in our account.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <button class="btn-block py-3 btn btn-black btn-lg"
+                                                onclick="window.location='/thankyou'">Place Order</button>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4">
-                        <h5 class="section-title position-relative text-uppercase mb-3"><span
-                                class="bg-secondary pr-3">Order Total</span></h5>
-                        <div class="bg-light p-30 mb-5">
-                            <div class="border-bottom">
-                                <h6 class="mb-3">Products</h6>
-                                <div class="d-flex justify-content-between">
-                                    <p>Product Name 1</p>
-                                    <p>$150</p>
-                                </div>
-                                <div class="d-flex justify-content-between">
-                                    <p>Product Name 2</p>
-                                    <p>$150</p>
-                                </div>
-                                <div class="d-flex justify-content-between">
-                                    <p>Product Name 3</p>
-                                    <p>$150</p>
-                                </div>
-                            </div>
-                            <div class="border-bottom pt-3 pb-2">
-                                <div class="d-flex justify-content-between mb-3">
-                                    <h6>Subtotal</h6>
-                                    <h6>$150</h6>
-                                </div>
-                                <div class="d-flex justify-content-between">
-                                    <h6 class="font-weight-medium">Shipping</h6>
-                                    <h6 class="font-weight-medium">$10</h6>
-                                </div>
-                            </div>
-                            <div class="pt-2">
-                                <div class="d-flex justify-content-between mt-2">
-                                    <h5>Total</h5>
-                                    <h5>$160</h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mb-5">
-                            <h5 class="section-title position-relative text-uppercase mb-3"><span
-                                    class="bg-secondary pr-3">Payment</span></h5>
-                            <div class="bg-light p-30">
-                                <div class="form-group">
-                                    <div class="custom-control custom-radio">
-                                        <input type="radio" class="custom-control-input" name="payment" id="paypal">
-                                        <label class="custom-control-label" for="paypal">Paypal</label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="custom-control custom-radio">
-                                        <input type="radio" class="custom-control-input" name="payment"
-                                            id="directcheck">
-                                        <label class="custom-control-label" for="directcheck">Direct Check</label>
-                                    </div>
-                                </div>
-                                <div class="form-group mb-4">
-                                    <div class="custom-control custom-radio">
-                                        <input type="radio" class="custom-control-input" name="payment"
-                                            id="banktransfer">
-                                        <label class="custom-control-label" for="banktransfer">Bank Transfer</label>
-                                    </div>
-                                </div>
-                                <button class="btn btn-block btn-primary font-weight-bold py-3">Place Order</button>
-                            </div>
+
                         </div>
                     </div>
+                    <!-- </form> -->
                 </div>
             </div>
-            <!-- Checkout End -->
 
         </div>
 
