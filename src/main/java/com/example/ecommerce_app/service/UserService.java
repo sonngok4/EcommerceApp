@@ -28,7 +28,7 @@ public class UserService {
 
     public User registerNewUser(UserDTO userDTO) {
         // Kiểm tra email đã tồn tại chưa
-        if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) { // Nên return Optional<User>
+        if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
             throw new RuntimeException("Error: Email is already in use!");
         }
 
@@ -112,5 +112,9 @@ public class UserService {
 
     public User getUserByUsername(String name) {
         return userRepository.findByUsername(name).orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found"));
     }
 }

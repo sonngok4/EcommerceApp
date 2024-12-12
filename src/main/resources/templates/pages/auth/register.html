@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 
     <head>
         <meta charset="UTF-8">
@@ -34,35 +34,51 @@
                 <div class="d-flex justify-content-center align-content-center col-md-6">
                     <div class="register-container">
                         <h2 class="mb-4 text-center">Create an Account</h2>
-                        <form id="registrationForm">
+                        <form id="registrationForm" method="post" role="form" th:action="@{/api/auth/register}"
+                            th:object="${user}">
                             <div class="row">
                                 <div class="mb-3 col-md-6">
                                     <label for="firstName" class="form-label">First Name</label>
-                                    <input type="text" class="form-control" id="firstName" name="firstName" required>
+                                    <input type="text" class="form-control" id="firstName" name="firstName"
+                                        placeholder="First Name" th:field="*{firstName}" required>
+                                    <p th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"
+                                        class="text-danger"></p>
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <label for="lastName" class="form-label">Last Name</label>
-                                    <input type="text" class="form-control" id="lastName" name="lastName" required>
+                                    <input type="text" class="form-control" id="lastName" name="lastName"
+                                        placeholder="Last Name" th:field="*{lastName}" required>
+                                    <p th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"
+                                        class="text-danger"></p>
                                 </div>
                             </div>
                             <div class="mb-3">
                                 <label for="email" class="form-label">Email address</label>
-                                <input type="email" class="form-control" id="email" name="email" required>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="Email"
+                                    th:field="*{email}" required>
+                                <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-danger"></p>
                             </div>
                             <div class="mb-3">
                                 <label for="username" class="form-label">Username</label>
-                                <input type="username" class="form-control" id="username" name="username" required>
+                                <input type="username" class="form-control" id="username" name="username"
+                                    placeholder="Username" th:field="*{username}" required>
+                                <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-danger">
+                                </p>
                             </div>
                             <div class="mb-3">
                                 <label for="password" class="form-label">Password</label>
                                 <input type="password" class="form-control" id="password" name="password" required
-                                    minlength="8">
+                                    placeholder="Password" th:field="*{password}" minlength="8">
                                 <div class="form-text">Password must be at least 8 characters long</div>
+                                <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger">
+                                </p>
                             </div>
                             <div class="mb-3">
                                 <label for="confirmPassword" class="form-label">Confirm Password</label>
                                 <input type="password" class="form-control" id="confirmPassword" name="confirmPassword"
-                                    required>
+                                    placeholder="Confirm Password" required>
+                                <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-danger">
+                                </p>
                             </div>
                             <div class="form-check mb-3">
                                 <input type="checkbox" class="form-check-input" id="agreeTerms" required>
@@ -84,51 +100,96 @@
         <!-- Bootstrap JS and dependencies -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script>
-            document.getElementById('registrationForm').addEventListener('submit', function (e) {
-                e.preventDefault();
+            const password = document.getElementById('password');
+                const confirmPassword = document.getElementById('confirmPassword');
 
-                // Password validation
-                const password = document.getElementById('password').value;
-                const confirmPassword = document.getElementById('confirmPassword').value;
-
-                if (password !== confirmPassword) {
-                    alert('Passwords do not match!');
-                    return;
+                function validatePassword() {
+                    if (password.value !== confirmPassword.value) {
+                        confirmPassword.setCustomValidity("Mật khẩu không khớp");
+                    } else {
+                        confirmPassword.setCustomValidity("");
+                    }
                 }
 
-                // Prepare user data
-                const userData = {
-                    firstName: document.getElementById('firstName').value,
-                    lastName: document.getElementById('lastName').value,
-                    email: document.getElementById('email').value,
-                    username: document.getElementById('username').value,
-                    password: password
-                };
+                password.addEventListener('change', validatePassword);
+                confirmPassword.addEventListener('change', validatePassword);
+        </script>
+        <script>
+            const submitButton = document.querySelector('button[type="submit"]');
+            document.getElementById('registrationForm').addEventListener('submit', function (event) {
+                event.preventDefault(); // Ngăn form submit mặc định
 
-                // Send registration request
+                // Disable nút submit và thêm spinner
+                submitButton.disabled = true;
+                submitButton.innerHTML = '<span class="spinner-border-sm spinner-border" role="status" aria-hidden="true"></span> Registering...';
+                function showAlert(message, type = 'success') {
+                    const alertContainer = document.createElement('div');
+                    alertContainer.className = `alert alert-${type} alert-dismissible fade show`;
+                    alertContainer.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    `;
+
+                    document.body.insertBefore(alertContainer, document.body.firstChild);
+                }
+
+                // Lấy dữ liệu form
+                const formData = new FormData(this);
+
                 fetch('/api/auth/register', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(userData)
+                    body: formData
                 })
-                    .then(response => response.json())
+                    .then(response => {
+                        // Kiểm tra response status
+                        if (!response.ok) {
+                            // Nếu có lỗi validation (400 Bad Request)
+                            return response.json().then(errors => {
+                                // Xử lý và hiển thị lỗi validation
+                                handleValidationErrors(errors);
+                                throw new Error('Validation Error');
+                            });
+                        }
+                        // Nếu thành công
+                        return response.json();
+                    })
                     .then(data => {
-                        if (data.id) {
-                            // Registration successful
-                            alert('Registration successful! Please login.');
-                            window.location.href = '/auth/login';
-                        } else {
-                            // Show error message
-                            alert('Registration failed: ' + (data.message || 'Unknown error'));
+                        // Chuyển hướng nếu có redirectUrl
+                        if (data.redirectUrl) {
+                            window.location.href = data.redirectUrl;
                         }
                     })
                     .catch(error => {
+                        // Xử lý các lỗi khác
                         console.error('Error:', error);
-                        alert('An error occurred during registration');
+                    })
+                    // Fetch logic ở trên...
+                    .finally(() => {
+                        // Khôi phục nút submit
+                        submitButton.disabled = false;
+                        submitButton.innerHTML = 'Register';
                     });
             });
+
+            function handleValidationErrors(errors) {
+                // Xóa các error message cũ
+                document.querySelectorAll('.text-danger').forEach(el => el.textContent = '');
+
+                // Hiển thị lỗi validation
+                errors.forEach(error => {
+                    const fieldName = error.field;
+                    const errorMessage = error.defaultMessage;
+
+                    // Tìm phần tử input và error message tương ứng
+                    const inputField = document.querySelector(`[name="${fieldName}"]`);
+                    if (inputField) {
+                        const errorContainer = inputField.nextElementSibling;
+                        if (errorContainer && errorContainer.classList.contains('text-danger')) {
+                            errorContainer.textContent = errorMessage;
+                        }
+                    }
+                });
+            }
         </script>
     </body>
 

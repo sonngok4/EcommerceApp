@@ -1,6 +1,7 @@
 <!-- header.html -->
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity">
 
     <head>
         <meta charset="UTF-8">
@@ -33,17 +34,48 @@
                             <li class="nav-item"><a class="nav-link" href="/contact">Contact us</a></li>
                         </ul>
 
-                        <ul class="custom-navbar-cta mb-2 mb-md-0 ms-5 navbar-nav">
-                            <li><a class="nav-link" href="#"><img src="images/user.svg" alt="User"></a></li>
-                            <li><a class="nav-link" href="/cart"><img src="images/cart.svg" alt="Cart"></a></li>
-                        </ul>
+                        <div class="custom-navbar-cta mb-2 mb-md-0 ms-5 navbar-nav">
+                            <div class="d-flex align-items-center">
+                                <div class="custom-navbar-cta mb-2 mb-md-0 ms-5 navbar-nav">
+                                    <!-- Dropdown for User -->
+                                    <div class="dropdown">
+                                        <a class="dropdown-toggle" href="#" id="userDropdown" role="button"
+                                            data-bs-toggle="dropdown" aria-expanded="false" style="color: #fff;">
+                                            <img src="/images/user.svg" alt="User" width="20">
+                                        </a>
+                                        <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                                            <!-- Authenticated user items -->
+                                            <div sec:authorize="isAuthenticated()" class="p-1">
+                                                <li class="dropdown-header">Welcome, <span th:text="${#authentication.details}">User</span>!</li>
+                                                <li><a class="dropdown-item" href="/auth/me">Profile</a></li>
+                                                <li><a class="dropdown-item" href="/auth/logout">Logout</a></li>
+                                            </div>
+
+                                            <!-- Non-authenticated user items -->
+                                            <div sec:authorize="!isAuthenticated()">
+                                                <li><a class="dropdown-item" href="/auth/register">Register</a></li>
+                                                <li><a class="dropdown-item" href="/auth/login">Login</a></li>
+                                            </div>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="d-flex align-items-center">
+                                <!-- Link to Favorites -->
+                                <a class="nav-link" href="#"><img src="/images/heart-regular.svg" style="color: #fff;"
+                                        width="24" alt="Heart"></a>
+                                <!-- Cart link -->
+                                <a class="nav-link" href="/cart"><img src="/images/cart.svg" alt="Cart"></a>
+                            </div>
+
+                        </div>
                     </div>
-                </div>
             </nav>
             <!-- End Header/Navigation -->
         </div>
         <th:block layout:fragment="scripts">
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
             <script src="js/bootstrap.bundle.min.js"></script>
             <script src="js/tiny-slider.js"></script>
             <script src="js/custom.js"></script>

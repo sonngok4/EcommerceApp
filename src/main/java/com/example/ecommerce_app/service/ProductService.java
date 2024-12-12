@@ -92,6 +92,10 @@ public class ProductService {
         return productRepository.findAll();
     }
 
+    public List<Product> findLimit(PageRequest pageable) {
+        return productRepository.findAll(pageable).getContent();
+    }
+
     public Product findById(Long id) {
         return productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
     }
