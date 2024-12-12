@@ -20,13 +20,13 @@ public class Product {
     @Column(nullable = false)
     private BigDecimal price;
 
-    private Integer stock;
+    private Integer stockQuantity;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "shop_id")
     private Shop shop;
 
@@ -43,12 +43,12 @@ public class Product {
     public Product() {
     }
 
-    public Product(String productName, String description, BigDecimal price, Integer stock, Category category,
+    public Product(String productName, String description, BigDecimal price, Integer stockQuantity, Category category,
             String imageUrl) {
         this.productName = productName;
         this.description = description;
         this.price = price;
-        this.stock = stock;
+        this.stockQuantity = stockQuantity;
         this.category = category;
         this.imageUrl = imageUrl;
         this.createdAt = LocalDateTime.now();
@@ -89,12 +89,12 @@ public class Product {
         this.price = price;
     }
 
-    public Integer getStock() {
-        return stock;
+    public Integer getStockQuantity() {
+        return stockQuantity;
     }
 
-    public void setStock(Integer stock) {
-        this.stock = stock;
+    public void setStockQuantity(Integer stockQuantity) {
+        this.stockQuantity = stockQuantity;
     }
 
     public Category getCategory() {

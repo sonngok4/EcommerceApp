@@ -1,24 +1,13 @@
-<!-- footer.html -->
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-
-    <head>
-        <meta charset="UTF-8">
-    </head>
-
-    <body>
-        <div th:fragment="footer">
-            <footer class="tm-footer row tm-mt-small">
-                <div class="col-12 font-weight-light">
-                    <p class="text-center text-white mb-0 px-4 small">
-                        Copyright &copy; <b>2018</b> All rights reserved.
-
-                        Design: <a rel="nofollow noopener" href="https://templatemo.com" class="tm-footer-link">Template
-                            Mo</a>
-                    </p>
-                </div>
-            </footer>
+<footer class="site-footer" th:fragement="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <p class="text-center">Copyright &copy;
+                    <script>document.write(new Date().getFullYear());</script>. All Rights Reserved. &mdash;
+                    Designed with love by <a href="https://untree.co">Untree.co</a> Distributed By <a
+                        href="https://themewagon.com">themewagon</a>
+                </p>
+            </div>
         </div>
-    </body>
-
-</html>
+    </div>
+</footer>

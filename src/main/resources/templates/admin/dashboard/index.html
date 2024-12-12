@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+    <head th:replace="admin/fragments/head :: head">
+        <title>Dashboard - Quản lý Thương mại Điện tử</title>
+    </head>
+
+    <body>
+        <div class="d-flex wrapper">
+            <!-- Sidebar -->
+            <div th:replace="admin/fragments/sidebar :: sidebar" class="sidebar-container"></div>
+
+            <div class="flex-grow-1 main-content">
+                <!-- Navbar -->
+                <nav th:replace="admin/fragments/navbar :: navbar"></nav>
+
+                <!-- Content here -->
+                <div class="p-1 min-vh-100 content">
+
+                    <div class="container-fluid">
+                        <div class="row">
+                            <!-- Thẻ tổng quan -->
+                            <div class="col-md-6 col-xl-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h5 class="mb-2 text-muted">Tổng Đơn hàng</h5>
+                                                <span class="mb-0 font-weight-bold h2" th:text="${totalOrders}">0</span>
+                                            </div>
+                                            <div class="text-primary">
+                                                <i class="fa-2x fa-shopping-cart fas"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Các thẻ khác tương tự -->
+                            <div class="col-md-6 col-xl-3">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h5 class="mb-2 text-muted">Tổng Doanh thu</h5>
+                                                <span class="mb-0 font-weight-bold h2"
+                                                    th:text="${#numbers.formatCurrency(totalRevenue)}">0 VND</span>
+                                            </div>
+                                            <div class="text-success">
+                                                <i class="fa-2x fa-dollar-sign fas"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Biểu đồ và bảng -->
+                        <div class="row">
+                            <div class="col-xl-8">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Biểu đồ Doanh số</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <canvas id="salesChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h5>Sản phẩm Bán chạy</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Sản phẩm</th>
+                                                    <th>Số lượng</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="product : ${topSellingProducts}">
+                                                    <td th:text="${product.name}">Tên sản phẩm</td>
+                                                    <td th:text="${product.quantity}">Số lượng</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <footer th:replace="admin/fragments/footer :: footer"></footer>
+            </div>
+        </div>
+
+            <div th:replace="admin/fragments/script :: script"></div>
+    </body>
+
+</html>

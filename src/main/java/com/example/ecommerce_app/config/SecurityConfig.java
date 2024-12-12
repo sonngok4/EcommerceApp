@@ -43,6 +43,7 @@ public class SecurityConfig {
         http
                 // Disable CSRF
                 .csrf(csrf -> csrf.disable())
+                
 
                 // Enable CORS
                 // .cors(cors -> cors.configurationSource(corsConfigurationSource()))
@@ -55,7 +56,7 @@ public class SecurityConfig {
                 // Set permissions on endpoints
                 .authorizeHttpRequests(auth -> auth
                         // Permit access to static resources (CSS, JS, images, etc.)
-                        .requestMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico", "scss/**", "admin/**").permitAll()
+                        .requestMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico", "scss/**").permitAll()
                         // Our public endpoints
                         .requestMatchers("/", "/auth/**", "/products", "/services", "/contact", "/about")
                         .permitAll()

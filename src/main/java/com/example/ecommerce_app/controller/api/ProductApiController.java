@@ -66,7 +66,7 @@ public class ProductApiController {
         product.setProductName(updateProduct.getProductName());
         product.setDescription(updateProduct.getDescription());
         product.setPrice(updateProduct.getPrice());
-        product.setStock(updateProduct.getStock());
+        product.setStockQuantity(updateProduct.getStockQuantity());
         product.setCategory(updateProduct.getCategory());
         product.setImageUrl(updateProduct.getImageUrl());
 

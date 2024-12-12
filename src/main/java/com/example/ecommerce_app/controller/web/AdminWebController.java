@@ -1,35 +1,37 @@
 package com.example.ecommerce_app.controller.web;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.ui.Model;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.example.ecommerce_app.dto.ProductRequest;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import org.springframework.web.bind.annotation.PathVariable;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+
+
+import com.example.ecommerce_app.dto.ProductRequestDTO;
+import com.example.ecommerce_app.model.Product;
+import com.example.ecommerce_app.repository.ProductRepository;
 import com.example.ecommerce_app.service.CategoryService;
 import com.example.ecommerce_app.service.ProductService;
 import com.example.ecommerce_app.service.UserService;
 
-import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/admin")
-@PreAuthorize("hasRole('ADMIN')")
 public class AdminWebController {
+
+    @Autowired
+    private ProductRepository productRepository;
 
     @Autowired
     private ProductService productService;
@@ -39,93 +41,62 @@ public class AdminWebController {
 
     @Autowired
     private UserService userService;
-    @GetMapping("/dashboard")
+
+    @GetMapping({"", "/dashboard"})
     public String admin() {
-        return "admin/demo";
+        return "admin/dashboard/index";
     }
 
-    @GetMapping("/accounts")
-    public String accounts() {
-        return "admin/accounts";
+    @GetMapping("/users")
+    public String listUsers() {
+        return "admin/users/list";
     }
 
-    @GetMapping("/login")
-    public String admin_login() {
-        return "admin/login";
-    }
-
+    
     @GetMapping("/products")
-    public String products() {
-        return "admin/products";
+    public String listProducts(Model model) {
+        List<Product> products = productRepository.findAllByOrderByCreatedAtDesc(); // Sắp xếp theo createdAt giảm dần
+        System.out.println("------>controller/admin/products");
+        System.out.println("Products: " + products);
+        model.addAttribute("products", products);
+        model.addAttribute("categories", categoryService.getAllCategories());
+        return "admin/products/list";
     }
 
     // Phương thức hiển thị trang thêm sản phẩm
-    @GetMapping("/add-product")
+    
+    @GetMapping("/products/add")
     public String showAddProductPage(Model model) {
-        // Thêm danh sách categories để hiển thị dropdown
         model.addAttribute("categories", categoryService.getAllCategories());
-        System.out.println("Categories:" + categoryService.getAllCategories());
-
-        // Tạo đối tượng product mới để binding form
-        model.addAttribute("product", new ProductRequest());
-
-        return "demo";
+        model.addAttribute("product", new ProductRequestDTO()); // Tạo đối tượng mới cho form thêm
+        return "admin/products/add"; // Trả về view thêm sản phẩm
     }
 
-    // Phương thức xử lý submit form
-    @PostMapping("/add-product")
-    public String addProduct(
-            @ModelAttribute("product") @Valid ProductRequest productRequest,
-            BindingResult bindingResult,
-            Model model,
-            Principal principal,
-            @RequestParam("imageFile") MultipartFile imageFile) {
-        // Kiểm tra validation
-        if (bindingResult.hasErrors()) {
-            // Nếu có lỗi, trả về lại trang với thông báo lỗi
-            model.addAttribute("categories", categoryService.getAllCategories());
-            return "admin/add-product";
-        }
-
-        try {
-            // Thêm ảnh vào request nếu có
-            productRequest.setImageFile(imageFile);
-
-            // Lấy user hiện tại
-            // User currentUser = userService.getUserByUsername(principal.getName());
-
-            // Gọi service để tạo sản phẩm
-            // productService.createProduct(productRequest, currentUser);
-
-            // Chuyển hướng và thông báo thành công
-            return "redirect:/admin/add-product?success";
-        } catch (Exception e) {
-            // Xử lý ngoại lệ
-            model.addAttribute("error", e);
-            // model.addAttribute("error", "Có lỗi xảy ra khi thêm sản phẩm");
-            model.addAttribute("categories", categoryService.getAllCategories());
-            return "admin/add-product";
-        }
+    @GetMapping("/products/edit/{id}")
+    public String editProduct(@PathVariable("id") Long id, Model model) {
+        System.out.println("------>controller/admin/products/edit");
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid product id"));
+        System.out.println("Product: " + product);
+        System.out.println("Categories: " + categoryService.getAllCategories());
+        model.addAttribute("product", product);
+        model.addAttribute("categories", categoryService.getAllCategories());
+        return "admin/products/edit"; // Trả về view chỉnh sửa sản phẩm
     }
 
-    @GetMapping("/edit-product")
-    public String edit_product() {
-        return "admin/edit-product";
+    @DeleteMapping("/products/delete/{id}")
+    public String delete_product(@PathVariable("id") Long id) {
+        return "admin/products/list";
     }
 
     @GetMapping("/orders")
-    public String orders() {
-        return "admin/orders";
+    public String listOrders() {
+        return "admin/orders/list";
     }
 
     @GetMapping("/reviews")
     public String reviews() {
         return "admin/reviews";
-    }
-
-    @GetMapping("/users")
-    public String users() {
-        return "admin/users";
     }
 
     @GetMapping("/categories")

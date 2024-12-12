@@ -58,6 +58,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 String username = jwtService.extractUsername(jwt);
 
+                System.out.println("Username: " + username);
+
                 // If authentication is not already set
                 if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                     UserDetails userDetails = userDetailsService.loadUserByUsername(username);
@@ -86,7 +88,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
                 if (authentication != null) {
-                    System.out.println("Authenticated user: " + authentication.getName());
+                    System.out.println("Authenticated user: " + authentication.getPrincipal());
                     System.out.println("Roles: " + authentication.getAuthorities());
                 }
 
@@ -96,6 +98,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         }
 
+        System.out.println("Before filter chain: " + request.getRequestURI());
         filterChain.doFilter(request, response);
+        System.out.println("After filter chain: " + request.getRequestURI());
+
     }
 }

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <head th:replace="admin/fragments/head :: head">
+        <title>Thêm Sản phẩm Mới</title>
+    </head>
+
+    <body>
+        <div class="d-flex wrapper">
+            <!-- Sidebar -->
+            <div th:replace="admin/fragments/sidebar :: sidebar" class="sidebar-container"></div>
+
+            <div class="flex-grow-1 main-content">
+                <!-- Navbar -->
+                <nav th:replace="admin/fragments/navbar :: navbar"></nav>
+
+                <!-- Content here -->
+                <div class="p-1 min-vh-100 content">
+                    <div class="container-fluid">
+                        <div class="mb-4 row">
+                            <div class="col-12">
+                                <h1 class="h3">Thêm Sản phẩm Mới</h1>
+                            </div>
+                        </div>
+
+                        <!-- Form Sản phẩm -->
+                        <form id="productForm" th:action="@{/api/admin/products/add}" method="post" th:object="${product}"
+                            enctype="multipart/form-data">
+                            <!-- Các trường thông tin sản phẩm như bạn đã làm trước đó -->
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <div class="mb-4 card">
+                                        <div class="card-header">
+                                            <h5 class="card-title">Thông tin Cơ bản</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="mb-3 col-md-6">
+                                                    <label class="form-label">Tên Sản phẩm</label>
+                                                    <input type="text" class="form-control" th:field="*{productName}"
+                                                        placeholder="Nhập tên sản phẩm" required>
+                                                    <div class="text-danger" th:if="${#fields.hasErrors('productName')}"
+                                                        th:errors="*{productName}"></div>
+                                                </div>
+                                                <!-- <div class="mb-3 col-md-6">
+                                                    <label class="form-label">Mã Sản phẩm</label>
+                                                    <input type="text" class="form-control" th:field="*{code}"
+                                                        placeholder="Mã sản phẩm" required>
+                                                </div> -->
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label">Mô tả Chi tiết</label>
+                                                <textarea class="form-control summernote" th:field="*{description}"
+                                                    rows="5" placeholder="Mô tả chi tiết sản phẩm"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-4 card">
+                                        <div class="card-header">
+                                            <h5 class="card-title">Giá và Tồn kho</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="mb-3 col-md-4">
+                                                    <label class="form-label">Giá Bán</label>
+                                                    <div class="input-group">
+                                                        <input type="number" class="form-control" th:field="*{price}"
+                                                            placeholder="0"  required>
+                                                        <span class="input-group-text">USD</span>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3 col-md-4">
+                                                    <label class="form-label">Số lượng Tồn kho</label>
+                                                    <input type="number" class="form-control"
+                                                        th:field="*{stockQuantity}" placeholder="0" min="0" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-4 card">
+                                        <div class="card-header">
+                                            <h5 class="card-title">Hình ảnh Sản phẩm</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="mb-3">
+                                                <label class="form-label">Hình ảnh Chính</label>
+                                                <input type="file" class="form-control" name="image"
+                                                    accept="image/*" th:field="*{image}" required>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-4 card">
+                                        <div class="card-header">
+                                            <h5 class="card-title">Danh mục</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="mb-3">
+                                                <label class="form-label">Danh mục</label>
+                                                <select class="form-control" th:field="*{categoryId}" required>
+                                                    <option value="">Chọn Danh mục</option>
+                                                    <option th:each="category : ${categories}" th:value="${category.id}"
+                                                        th:text="${category.categoryName}"></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Nút Lưu -->
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fa-save fas"></i> Lưu Sản phẩm
+                                    </button>
+                                    <a th:href="@{/admin/products}" class="ml-2 btn btn-secondary">
+                                        <i class="fa-times fas"></i> Hủy
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <footer th:replace="admin/fragments/footer :: footer"></footer>
+
+                <script>
+                    document.getElementById("productForm").addEventListener("submit", function (event) {
+                        event.preventDefault(); // Ngừng việc gửi form mặc định
+
+                        var formData = new FormData(this); // Lấy dữ liệu form
+
+                        fetch('/api/admin/products/add', {
+                            method: 'POST',
+                            body: formData,
+                        })
+                            .then(response => {
+                                if (response.ok) {
+                                    // Nếu server trả về thành công (HTTP 200)
+                                    window.location.href = '/admin/products'; // Chuyển hướng đến trang danh sách sản phẩm
+                                } else {
+                                    // Nếu có lỗi (HTTP 400, 500,...)
+                                    return response.json().then(data => {
+                                        // Xử lý lỗi từ server và hiển thị thông báo lỗi
+                                        alert('Có lỗi xảy ra: ' + data.message || 'Không thể thêm sản phẩm');
+                                    });
+                                }
+                            })
+                            .catch(error => {
+                                // Xử lý lỗi mạng hoặc lỗi khi gọi API
+                                alert('Có lỗi xảy ra: ' + error.message);
+                            });
+                    });
+                </script>
+
+            </div>
+        </div>
+    </body>
+
+</html>

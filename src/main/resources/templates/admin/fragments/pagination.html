@@ -1,0 +1,7 @@
+<div th:fragment="pagination">
+    <ul class="pagination">
+        <li class="page-item" th:each="i : ${#numbers.sequence(1, products.totalPages)}">
+            <a class="page-link" th:href="@{'/admin/products?page=' + ${i - 1} + '&search=' + ${param.search} + '&category=' + ${param.category}}">[[${i}]]</a>
+        </li>
+    </ul>
+</div>
