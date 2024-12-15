@@ -84,7 +84,7 @@ public class AuthApiController {
                                                         loginDTO.getEmail(),
                                                         loginDTO.getPassword()));
 
-                        System.out.println("Authentication: " + authentication);
+                        // System.out.println("Authentication: " + authentication);
 
                         // Get user details
                         UserDetails userDetails = (UserDetails) authentication.getPrincipal();

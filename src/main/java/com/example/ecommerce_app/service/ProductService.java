@@ -27,6 +27,7 @@ import com.example.ecommerce_app.exception.ResourceNotFoundException;
 import com.example.ecommerce_app.model.User;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -44,6 +45,9 @@ public class ProductService {
     @Autowired
     private ShopRepository shopRepository;
 
+    @Autowired
+    private UploadImageService uploadImageService;
+
     @Transactional
     public ProductResponseDTO createProduct(@Valid ProductRequestDTO productDTO, User currentUser) throws IOException {
         // Lấy shop của user hiện tại
@@ -52,15 +56,7 @@ public class ProductService {
         System.out.println("Shop: " + currentShop);
 
         // Upload ảnh lên Cloudinary
-        Map uploadResult = cloudinary.uploader().upload(
-                productDTO.getImage().getBytes(),
-                ObjectUtils.asMap(
-                        "folder", "furni-products/",
-                        "overwrite", true));
-
-        // Lấy URL ảnh từ kết quả upload
-        String imageUrl = (String) uploadResult.get("secure_url");
-
+        String imageUrl = uploadImageService.uploadImage(productDTO.getImageUrl(), "furni-products");
         // Tạo sản phẩm
         Product product = new Product();
         product.setProductName(productDTO.getProductName());
@@ -68,7 +64,7 @@ public class ProductService {
         product.setPrice(productDTO.getPrice());
         product.setStockQuantity(productDTO.getStockQuantity());
         product.setDescription(productDTO.getDescription());
-        product.setCategory(categoryRepository.findById(productDTO.getCategoryId())
+        product.setCategory(categoryRepository.findById(productDTO.getCategory())
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found")));
 
         // Gán shop cho sản phẩm
@@ -151,35 +147,78 @@ public class ProductService {
     }
 
     public void deleteProduct(Long id) {
+        Product product = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
+        String imageUrl = product.getImageUrl();
+        if (imageUrl != null) {
+            try {
+                String publicId = uploadImageService.extractPublicIdFromUrl(imageUrl);
+                uploadImageService.deleteImageFromCloudinary(publicId);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         productRepository.deleteById(id);
     }
 
+    @Transactional
     public ProductResponseDTO updateProduct(Long id, ProductRequestDTO productRequestDTO) throws IOException {
         if (productRequestDTO.getId() == null) {
             throw new IllegalArgumentException("The given id must not be null!!");
         }
 
+        // Lấy sản phẩm hiện tại từ database
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
 
-        String imageUrl = product.getImageUrl();
-        if (productRequestDTO.getImage() != null) {
-            Map uploadResult = cloudinary.uploader().upload(
-                    productRequestDTO.getImage().getBytes(),
-                    ObjectUtils.asMap(
-                            "folder", "furni-products/",
-                            "overwrite", true));
-            imageUrl = (String) uploadResult.get("secure_url");
+        // Cập nhật tên sản phẩm nếu có thay đổi
+        if (productRequestDTO.getProductName() != null
+                && !productRequestDTO.getProductName().equals(product.getProductName())) {
+            product.setProductName(productRequestDTO.getProductName());
         }
-        product.setId(id);
+
+        // Cập nhật mô tả nếu có thay đổi
+        if (productRequestDTO.getDescription() != null
+                && !productRequestDTO.getDescription().equals(product.getDescription())) {
+            product.setDescription(productRequestDTO.getDescription());
+        }
+
+        // Cập nhật giá nếu có thay đổi
+        if (productRequestDTO.getPrice() != null && !productRequestDTO.getPrice().equals(product.getPrice())) {
+            product.setPrice(productRequestDTO.getPrice());
+        }
+
+        // Cập nhật số lượng tồn kho nếu có thay đổi
+        if (productRequestDTO.getStockQuantity() != null
+                && !productRequestDTO.getStockQuantity().equals(product.getStockQuantity())) {
+            product.setStockQuantity(productRequestDTO.getStockQuantity());
+        }
+
+        // Cập nhật danh mục nếu có thay đổi
+        if (productRequestDTO.getCategory() != null
+                && !productRequestDTO.getCategory().equals(product.getCategory().getId())) {
+            product.setCategory(categoryRepository.findById(productRequestDTO.getCategory())
+                    .orElseThrow(() -> new ResourceNotFoundException("Category not found")));
+        }
+
+        // Cập nhật hình ảnh nếu có thay đổi
+        String imageUrl = product.getImageUrl();
+        if (productRequestDTO.getImageUrl() != null && !productRequestDTO.getImageUrl().isEmpty()) {
+            // Lấy public_id của ảnh cũ để xóa khỏi Cloudinary (nếu có)
+            if (imageUrl != null) {
+                String publicId = uploadImageService.extractPublicIdFromUrl(product.getImageUrl());
+                // System.out.println("Public ID: " + publicId);
+                uploadImageService.deleteImageFromCloudinary(publicId); // Xóa ảnh cũ
+            }
+        
+            // Upload ảnh lên Cloudinary
+            imageUrl = (String) uploadImageService.uploadImage(productRequestDTO.getImageUrl(), "furni-products/");
+        }
         product.setImageUrl(imageUrl);
-        product.setProductName(productRequestDTO.getProductName());
-        product.setDescription(productRequestDTO.getDescription());
-        product.setPrice(productRequestDTO.getPrice());
-        product.setStockQuantity(productRequestDTO.getStockQuantity());
-        product.setCategory(categoryRepository.findById(productRequestDTO.getCategoryId())
-                .orElseThrow(() -> new ResourceNotFoundException("Category not found")));
+
+        // Lưu sản phẩm đã cập nhật vào cơ sở dữ liệu
         Product updatedProduct = productRepository.save(product);
+
         return convertToDTO(updatedProduct);
     }
+
 }

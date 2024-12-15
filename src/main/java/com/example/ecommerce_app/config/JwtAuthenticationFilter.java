@@ -58,7 +58,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 String username = jwtService.extractUsername(jwt);
 
-                System.out.println("Username: " + username);
+                // System.out.println("Username: " + username);
 
                 // If authentication is not already set
                 if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -66,8 +66,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     // Lấy fullName và thêm vào Authentication
                     String fullName = ((CustomUserDetails) userDetails).getFullName();
 
-                    System.out.println("USER ROLE: " + userDetails.getAuthorities().stream()
-                            .map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
+                    // System.out.println("USER ROLE: " + userDetails.getAuthorities().stream()
+                    //         .map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
 
                     // Validate token
                     if (jwtService.isTokenValid(jwt, userDetails)) {
@@ -86,15 +86,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                     }
                 }
-                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                if (authentication != null) {
-                    System.out.println("Authenticated user: " + authentication.getPrincipal());
-                    System.out.println("Roles: " + authentication.getAuthorities());
-                }
+                // Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                // if (authentication != null) {
+                //     System.out.println("Authenticated user: " + authentication.getPrincipal());
+                //     System.out.println("Roles: " + authentication.getAuthorities());
+                // }
 
             } catch (Exception e) {
                 // Log the exception
                 System.out.println("JWT Authentication error: " + e.getMessage());
+                throw new RuntimeException("JWT Authentication error: " + e.getMessage());
             }
         }
 

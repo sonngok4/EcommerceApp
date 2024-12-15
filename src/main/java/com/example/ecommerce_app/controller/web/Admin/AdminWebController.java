@@ -1,13 +1,10 @@
-package com.example.ecommerce_app.controller.web;
+package com.example.ecommerce_app.controller.web.Admin;
 
-import java.security.Principal;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.ui.Model;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,14 +14,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 
-
 import com.example.ecommerce_app.dto.ProductRequestDTO;
 import com.example.ecommerce_app.model.Product;
 import com.example.ecommerce_app.repository.ProductRepository;
 import com.example.ecommerce_app.service.CategoryService;
 import com.example.ecommerce_app.service.ProductService;
 import com.example.ecommerce_app.service.UserService;
-
 
 @Controller
 @RequestMapping("/admin")
@@ -42,7 +37,7 @@ public class AdminWebController {
     @Autowired
     private UserService userService;
 
-    @GetMapping({"", "/dashboard"})
+    @GetMapping({ "", "/dashboard" })
     public String admin() {
         return "admin/dashboard/index";
     }
@@ -52,19 +47,17 @@ public class AdminWebController {
         return "admin/users/list";
     }
 
-    
     @GetMapping("/products")
     public String listProducts(Model model) {
         List<Product> products = productRepository.findAllByOrderByCreatedAtDesc(); // Sắp xếp theo createdAt giảm dần
         System.out.println("------>controller/admin/products");
-        System.out.println("Products: " + products);
         model.addAttribute("products", products);
         model.addAttribute("categories", categoryService.getAllCategories());
         return "admin/products/list";
     }
 
     // Phương thức hiển thị trang thêm sản phẩm
-    
+
     @GetMapping("/products/add")
     public String showAddProductPage(Model model) {
         model.addAttribute("categories", categoryService.getAllCategories());
@@ -75,9 +68,7 @@ public class AdminWebController {
     @GetMapping("/products/edit/{id}")
     public String editProduct(@PathVariable("id") Long id, Model model) {
         System.out.println("------>controller/admin/products/edit");
-        Product product = productRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid product id"));
-        System.out.println("Product: " + product);
+        Product product = productService.findById(id);
         System.out.println("Categories: " + categoryService.getAllCategories());
         model.addAttribute("product", product);
         model.addAttribute("categories", categoryService.getAllCategories());
@@ -86,6 +77,8 @@ public class AdminWebController {
 
     @DeleteMapping("/products/delete/{id}")
     public String delete_product(@PathVariable("id") Long id) {
+        System.out.println("------>controller/admin/products/delete");
+        productService.deleteProduct(id);
         return "admin/products/list";
     }
 

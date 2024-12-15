@@ -17,6 +17,7 @@
 
                 <!-- Content here -->
                 <div class="p-1 min-vh-100 content">
+
                     <div class="container-fluid">
                         <div class="mb-4 row">
                             <div class="col-12">
@@ -25,8 +26,9 @@
                         </div>
 
                         <!-- Form Sản phẩm -->
-                        <form th:action="@{/api/admin/products/update/{id}(id=${product.id})}" method="post"
-                            th:object="${product}" enctype="multipart/form-data">
+                        <form id="productForm" th:action="@{/api/admin/products/update/{id}(id=${product.id})}"
+                            method="post" th:object="${product}" enctype="multipart/form-data">
+                            <input type="hidden" name="_method" value="PUT">
                             <div class="row">
                                 <div class="col-lg-8">
                                     <div class="mb-4 card">
@@ -35,6 +37,8 @@
                                         </div>
                                         <div class="card-body">
                                             <div class="row">
+                                                <!-- Thêm một trường ẩn cho productId -->
+                                                <input type="hidden" id="productId" th:value="${id}">
                                                 <div class="mb-3 col-md-6">
                                                     <label class="form-label">Tên Sản phẩm</label>
                                                     <input type="text" class="form-control" th:field="*{productName}"
@@ -87,13 +91,36 @@
                                         <div class="card-body">
                                             <div class="mb-3">
                                                 <label class="form-label">Hình ảnh Chính</label>
-                                                <input type="file" class="form-control" name="imageUrl" accept="image/*"
-                                                    th:field="*{imageUrl}">
-                                                <div th:if="${product.imageUrl}">
-                                                    <img th:src="@{${product.imageUrl}}" alt="Hình ảnh hiện tại"
-                                                        class="img-thumbnail" style="max-width: 200px;">
+                                                <div class="input-group">
+                                                    <!-- Input file -->
+                                                    <input type="file" class="form-control" name="imageUrl"
+                                                        accept="image/*" th:field="*{imageUrl}" id="imageInput"
+                                                        onchange="previewImage(event)">
+
+                                                    <!-- Nút Hủy -->
+                                                    <button type="button" class="btn btn-danger" id="clearImageBtn"
+                                                        style="display: none;" onclick="clearImage()"><i
+                                                            class="fa-times fas"></i></button>
+                                                </div>
+
+                                                <div class="d-flex align-items-center gap-2 mt-2">
+                                                    <div th:if="${product.imageUrl}" class="d-flex flex-column">
+                                                        <img th:src="@{${product.imageUrl}}" alt="Hình ảnh hiện tại"
+                                                            class="img-thumbnail"
+                                                            style="max-width: 350px; height: 300px; object-fit: cover;">
+                                                        <label class="form-label">Hình ảnh Hiện Tại</label>
+                                                    </div>
+
+                                                    <!-- Hiển thị ảnh preview nếu có -->
+                                                    <div id="imagePreviewContainer" style="display: none;">
+                                                        <img id="imagePreview" class="img-thumbnail"
+                                                            style="max-width: 350px; height: 300px; object-fit: cover;">
+                                                        <label class="form-label">Hình ảnh Cập Nhật</label>
+                                                    </div>
                                                 </div>
                                             </div>
+
+
                                         </div>
                                     </div>
 
@@ -103,14 +130,17 @@
                                         </div>
                                         <div class="card-body">
                                             <div class="mb-3">
+                                                <!-- <div th:each="category : ${categories}">
+                                                    <p th:text="${category.id}"></p>
+                                                    <p th:text="${category.categoryName}"></p>
+                                                </div> -->
+
                                                 <label class="form-label">Danh mục</label>
-                                                <select class="form-control" title="Chọn Danh mục"
-                                                    required>
+                                                <select class="form-control" th:field="*{category}" required>
                                                     <option value="">Chọn Danh mục</option>
-                                                    <option th:each="category : ${categories}"
-                                                        th:selected="${product.category.id == category.id}"
-                                                        th:value="${category.id}" th:text="${category.categoryName}">
-                                                    </option>
+                                                    <option th:each="category : ${categories}" th:value="${category.id}"
+                                                        th:selected="${category.id == product.category.id}"
+                                                        th:text="${category.categoryName}"></option>
                                                 </select>
                                             </div>
                                         </div>
@@ -134,6 +164,70 @@
                 </div>
 
                 <footer th:replace="admin/fragments/footer :: footer"></footer>
+
+                <script>
+                    document.getElementById("productForm").addEventListener("submit", function (event) {
+                        event.preventDefault(); // Ngừng gửi form để kiểm tra dữ liệu trước
+
+                        // Tạo FormData từ form
+                        var formData = new FormData(this);
+
+                        // Kiểm tra tất cả các dữ liệu trong FormData
+                        for (var pair of formData.entries()) {
+                            console.log(pair[0] + ": " + pair[1]); // In tên và giá trị của từng field
+                        }
+
+                        // Gửi formData tới server sau khi kiểm tra
+                        fetch('/api/admin/products/update/' + document.getElementById("productId").value, {
+                            method: 'PUT',
+                            body: formData
+                        }).then(response => {
+                            if (response.ok) {
+                                // Nếu server trả về thành công (HTTP 200)
+                                window.location.href = '/admin/products'; // Chuyển hướng đến trang danh sách sản phẩm
+                            } else {
+                                // Nếu có lỗi (HTTP 400, 500,...)
+                                return response.json().then(data => {
+                                    // Xử lý lỗi từ server và hiển thị thông báo lỗi
+                                    alert('Có lỗi xảy ra: ' + data.message || 'Không thể cập nhật sản phẩm');
+                                });
+                            }
+                        })
+                            .catch(error => {
+                                // Xử lý lỗi mạng hoặc lỗi khi gọi API
+                                alert('Có lỗi xảy ra: ' + error.message);
+                            });
+                    });
+
+
+                    // Hàm xem trước ảnh
+                    function previewImage(event) {
+                        var imageInput = event.target; // Input file
+                        var imagePreview = document.getElementById('imagePreview'); // Thẻ img để hiển thị preview
+                        var clearImageBtn = document.getElementById('clearImageBtn'); // Nút hủy
+
+                        imagePreview.src = URL.createObjectURL(imageInput.files[0]); // Tạo URL từ file đã chọn
+                        imagePreview.style.display = 'block'; // Hiển thị ảnh preview
+                        document.getElementById('imagePreviewContainer').style.display = 'block'; // Hiển thị container chứa ảnh preview
+                        clearImageBtn.style.display = 'inline-block'; // Hiển thị nút hủy
+                    }
+
+                    // Hàm hủy ảnh preview
+                    function clearImage() {
+                        // Xóa file đã chọn trong input
+                        var imageInput = document.getElementById('imageInput');
+                        imageInput.value = ""; // Reset input file về trạng thái không có file nào
+
+                        // Ẩn ảnh preview
+                        document.getElementById('imagePreviewContainer').style.display = 'none';
+                        document.getElementById('imagePreview').src = ""; // Xóa URL của ảnh preview
+
+                        // Ẩn nút hủy
+                        document.getElementById('clearImageBtn').style.display = 'none';
+                    }
+
+                </script>
+
             </div>
         </div>
     </body>

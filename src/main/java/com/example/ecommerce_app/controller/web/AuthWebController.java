@@ -40,8 +40,6 @@ public class AuthWebController {
         model.addAttribute("user", user);
         System.out.println("------>controller/auth/me");
         // Debugging
-        user.getRoles().forEach(role -> System.out.println(role.getName()));
-        System.out.println("Authorities: " + userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
         return "pages/auth/profile";
     }
 

@@ -1,4 +1,3 @@
-// ProductDTO.java
 package com.example.ecommerce_app.dto;
 
 import java.math.BigDecimal;
@@ -11,13 +10,12 @@ import lombok.Data;
 @Data
 public class ProductRequestDTO {
     private Long id;
-    private Long categoryId;
+    private Long category;
     private String productName;
-    private MultipartFile image;
+    private MultipartFile imageUrl;
     private BigDecimal price;
     private Integer stockQuantity;
     private String description;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
 }
