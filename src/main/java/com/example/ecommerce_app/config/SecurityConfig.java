@@ -37,13 +37,11 @@ public class SecurityConfig {
     @Autowired
     private CustomAccessDeniedHandler accessDeniedHandler;
 
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 // Disable CSRF
                 .csrf(csrf -> csrf.disable())
-                
 
                 // Enable CORS
                 // .cors(cors -> cors.configurationSource(corsConfigurationSource()))
@@ -72,7 +70,18 @@ public class SecurityConfig {
 
                 // Customize the exception handling
                 .exceptionHandling(exception -> exception
-                        .accessDeniedHandler(accessDeniedHandler))
+                        .accessDeniedHandler(
+                                accessDeniedHandler)
+                        .accessDeniedPage("/auth/access-denied"))
+
+                // Login configuration
+                .formLogin(
+                        form -> form
+                                .loginPage("/auth/login")
+                                .loginProcessingUrl("/auth/login")
+                                .defaultSuccessUrl("/auth/me")
+                                .failureUrl("/auth/login?error")
+                                .permitAll())
 
                 // Logout configuration
                 .logout(
@@ -116,7 +125,7 @@ public class SecurityConfig {
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
-    
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
