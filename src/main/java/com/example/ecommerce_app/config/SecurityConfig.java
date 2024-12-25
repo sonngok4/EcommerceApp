@@ -28,106 +28,114 @@ import com.example.ecommerce_app.service.CustomUserDetailsService;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private JwtAuthenticationFilter jwtAuthFilter;
+        @Autowired
+        private JwtAuthenticationFilter jwtAuthFilter;
 
-    @Autowired
-    private CustomUserDetailsService userDetailsService;
+        @Autowired
+        private CustomUserDetailsService userDetailsService;
 
-    @Autowired
-    private CustomAccessDeniedHandler accessDeniedHandler;
+        @Autowired
+        private CustomAccessDeniedHandler accessDeniedHandler;
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                // Disable CSRF
-                .csrf(csrf -> csrf.disable())
+        @Bean
+        public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+                http
+                                // Disable CSRF
+                                .csrf(csrf -> csrf.disable())
 
-                // Enable CORS
-                // .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                                // Enable CORS
+                                // .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
-                // Set session management to stateless
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .authenticationProvider(authenticationProvider()) // Set authentication provider
+                                // Set session management to stateless
+                                .sessionManagement(session -> session
+                                                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                                .authenticationProvider(authenticationProvider()) // Set authentication provider
 
-                // Set permissions on endpoints
-                .authorizeHttpRequests(auth -> auth
-                        // Permit access to static resources (CSS, JS, images, etc.)
-                        .requestMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico", "scss/**").permitAll()
-                        // Our public endpoints
-                        .requestMatchers("/", "/auth/**", "/products", "/services", "/contact", "/about")
-                        .permitAll()
-                        // Protected routes - require authentication
-                        .requestMatchers("/cart/**", "/checkout/**", "/auth/me/**", "/orders/**", "/logout/**")
-                        .authenticated()
-                        .requestMatchers("/api/auth/**", "/api/products/**").permitAll()
-                        .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/user/**").hasRole("USER")
-                        // Our private endpoints
-                        .anyRequest().authenticated()) // All other requests require authentication
+                                // Set permissions on endpoints
+                                .authorizeHttpRequests(auth -> auth
+                                                // Permit access to static resources (CSS, JS, images, etc.)
+                                                .requestMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico",
+                                                                "scss/**")
+                                                .permitAll()
+                                                // Our public endpoints
+                                                .requestMatchers("/", "/auth/**", "/products", "/services", "/contact",
+                                                                "/about")
+                                                .permitAll()
+                                                // Protected routes - require authentication
+                                                .requestMatchers("/cart/**", "/checkout/**", "/auth/me/**",
+                                                                "/orders/**", "/logout/**")
+                                                .authenticated()
+                                                .requestMatchers("/api/auth/**", "/api/products/**").permitAll()
+                                                .requestMatchers("/admin/**").hasRole("ADMIN")
+                                                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                                                .requestMatchers("/api/user/**").hasRole("USER")
+                                                // Our private endpoints
+                                                .anyRequest().authenticated()) // All other requests require
+                                                                               // authentication
 
-                // Customize the exception handling
-                .exceptionHandling(exception -> exception
-                        .accessDeniedHandler(
-                                accessDeniedHandler)
-                        .accessDeniedPage("/auth/access-denied"))
+                                // Customize the exception handling
+                                .exceptionHandling(exception -> exception
+                                                .accessDeniedHandler(
+                                                                accessDeniedHandler)
+                                                .accessDeniedPage("/auth/access-denied"))
 
-                // Login configuration
-                .formLogin(
-                        form -> form
-                                .loginPage("/auth/login")
-                                .loginProcessingUrl("/auth/login")
-                                .defaultSuccessUrl("/auth/me")
-                                .failureUrl("/auth/login?error")
-                                .permitAll())
+                                // Login configuration
+                                .formLogin(
+                                                form -> form
+                                                                .loginPage("/auth/login")
+                                                                .loginProcessingUrl("/auth/login")
+                                                                .defaultSuccessUrl("/auth/me")
+                                                                .failureUrl("/auth/login?error")
+                                                                .permitAll())
 
-                // Logout configuration
-                .logout(
-                        logout -> logout
-                                .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout"))
-                                .logoutSuccessUrl("/auth/login?logout")
-                                .clearAuthentication(true)
-                                .deleteCookies("jwt")
-                                .deleteCookies("JSESSIONID")
-                                .permitAll());
+                                // Logout configuration
+                                .logout(
+                                                logout -> logout
+                                                                .logoutRequestMatcher(new AntPathRequestMatcher(
+                                                                                "/auth/logout"))
+                                                                .logoutSuccessUrl("/auth/login?logout")
+                                                                .clearAuthentication(true)
+                                                                .deleteCookies("jwt")
+                                                                .deleteCookies("JSESSIONID")
+                                                                .permitAll());
 
-        return http.build();
-    }
+                return http.build();
+        }
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
+        @Bean
+        public CorsConfigurationSource corsConfigurationSource() {
 
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:8080"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(
-                Arrays.asList("Authorization", "Content-Type", "Access-Control-Allow-Origin", "x-auth-token"));
-        configuration.setExposedHeaders(Arrays.asList("Authorization", "x-auth-token"));
-        configuration.setAllowCredentials(true);
+                CorsConfiguration configuration = new CorsConfiguration();
+                configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:8080"));
+                configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+                configuration.setAllowedHeaders(
+                                Arrays.asList("Authorization", "Content-Type", "Access-Control-Allow-Origin",
+                                                "x-auth-token"));
+                configuration.setExposedHeaders(Arrays.asList("Authorization", "x-auth-token"));
+                configuration.setAllowCredentials(true);
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+                UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+                source.registerCorsConfiguration("/**", configuration);
+                return source;
+        }
 
-    @Bean
-    public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager();
-    }
+        @Bean
+        public AuthenticationManager authenticationManager(
+                        AuthenticationConfiguration authenticationConfiguration) throws Exception {
+                return authenticationConfiguration.getAuthenticationManager();
+        }
 
-    @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(passwordEncoder());
-        return authProvider;
-    }
+        @Bean
+        public AuthenticationProvider authenticationProvider() {
+                DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+                authProvider.setUserDetailsService(userDetailsService);
+                authProvider.setPasswordEncoder(passwordEncoder());
+                return authProvider;
+        }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+                return new BCryptPasswordEncoder();
+        }
 }
