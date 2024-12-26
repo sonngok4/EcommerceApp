@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.ecommerce_app.model.Product;
@@ -30,10 +31,16 @@ public class ProductWebController {
 
     // Hiển thị danh sách sản phẩm
     @GetMapping
-    public String listProducts(Model model) {
+    public String listProducts(@RequestParam(required = false) Long categoryId, Model model) {
         // Page<Product> products = productService.findPaginated(page, size);
-        List<Product> products = productService.findAll();
+        List<Product> products;
+        if (categoryId != null) {
+            products = productService.findByCategoryId(categoryId);
+        } else {
+            products = productService.findAll();
+        }
         model.addAttribute("products", products);
+        model.addAttribute("categoryId", categoryId);
         System.out.printf("------>controller/products/listProducts", products);
         return "pages/shop"; // Trả về template Thymeleaf
     }

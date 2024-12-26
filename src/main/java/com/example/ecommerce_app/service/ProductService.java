@@ -6,35 +6,31 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
 import com.example.ecommerce_app.dto.ProductRequestDTO;
 import com.example.ecommerce_app.dto.ProductResponseDTO;
 import com.example.ecommerce_app.dto.CategoryResponseDTO;
-import com.example.ecommerce_app.dto.ProductRequest;
+// import com.example.ecommerce_app.dto.ProductRequest;
 import com.example.ecommerce_app.model.Category;
 import com.example.ecommerce_app.model.Product;
 import com.example.ecommerce_app.model.Shop;
 import com.example.ecommerce_app.repository.ProductRepository;
 import com.example.ecommerce_app.repository.ShopRepository;
 
-import io.micrometer.common.util.StringUtils;
+// import io.micrometer.common.util.StringUtils;
 import jakarta.validation.Valid;
-import jakarta.validation.ValidationException;
+// import jakarta.validation.ValidationException;
 
 import com.example.ecommerce_app.repository.CategoryRepository;
 import com.example.ecommerce_app.exception.ResourceNotFoundException;
 import com.example.ecommerce_app.model.User;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class ProductService {
-    @Autowired
-    private Cloudinary cloudinary;
+    // @Autowired
+    // private Cloudinary cloudinary;
 
     @Autowired
     private ProductRepository productRepository;
@@ -102,16 +98,16 @@ public class ProductService {
         return categoryDTO;
     }
 
-    private void validateProductRequest(ProductRequest request) {
-        // Các quy tắc kiểm tra:
-        // - Tên sản phẩm không được trống
-        // - Giá phải lớn hơn 0
-        // - Danh mục tồn tại
-        if (StringUtils.isEmpty(request.getName())) {
-            throw new ValidationException("Product name cannot be empty");
-        }
-        // Các validation khác...
-    }
+    // private void validateProductRequest(ProductRequest request) {
+    // // Các quy tắc kiểm tra:
+    // // - Tên sản phẩm không được trống
+    // // - Giá phải lớn hơn 0
+    // // - Danh mục tồn tại
+    // if (StringUtils.isEmpty(request.getName())) {
+    // throw new ValidationException("Product name cannot be empty");
+    // }
+    // // Các validation khác...
+    // }
 
     public List<Product> findAll() {
         return productRepository.findAll();
@@ -123,6 +119,19 @@ public class ProductService {
 
     public Product findById(Long id) {
         return productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
+    }
+
+    // public List<Product> findByCategoryName(String categoryName) {
+    // return productRepository.findByCategoryName(categoryName);
+    // }
+
+    public List<Category> getAllCategories() {
+        return categoryRepository.findAll();
+    }
+
+    // Tìm sản phẩm theo ID danh mục
+    public List<Product> findByCategoryId(Long categoryId) {
+        return productRepository.findByCategoryId(categoryId);
     }
 
     public boolean isProductNameUnique(String productName) {
@@ -209,7 +218,7 @@ public class ProductService {
                 // System.out.println("Public ID: " + publicId);
                 uploadImageService.deleteImageFromCloudinary(publicId); // Xóa ảnh cũ
             }
-        
+
             // Upload ảnh lên Cloudinary
             imageUrl = (String) uploadImageService.uploadImage(productRequestDTO.getImageUrl(), "furni-products/");
         }

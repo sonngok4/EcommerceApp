@@ -45,6 +45,20 @@
 
     <body>
         <div class="container">
+            <!-- Notification for loading -->
+            <div id="loadingMessage" class="alert alert-info" style="display: none;">
+                Please wait a second...
+            </div>
+
+            <!-- Notification for successful login -->
+            <div id="loginSuccessMessage" class="alert alert-success" style="display: none;">
+                Login successfully!
+            </div>
+
+            <!-- Notification for failed login -->
+            <div id="loginFailMessage" class="alert alert-danger" style="display: none;">
+                Failed to try login. Please check your email and password.
+            </div>
             <div class="justify-content-center row">
                 <div class="col-md-5">
                     <!-- Navigation Back Button -->
@@ -114,13 +128,22 @@
         <script>
             // Login Form Handler
             document.addEventListener('DOMContentLoaded', () => {
+
                 const loginForm = document.getElementById('loginForm');
+                const loadingMessage = document.getElementById('loadingMessage');
+                const loginSuccessMessage = document.getElementById('loginSuccessMessage');
+                const loginFailMessage = document.getElementById('loginFailMessage');
 
                 loginForm.addEventListener('submit', async (e) => {
                     e.preventDefault();
 
                     const email = document.getElementById('email').value;
                     const password = document.getElementById('password').value;
+
+                    // Hiển thị thông báo đang tải
+                    loadingMessage.style.display = 'block';
+                    loginSuccessMessage.style.display = 'none';
+                    loginFailMessage.style.display = 'none';
 
                     try {
                         const response = await fetch('/api/auth/login', {
@@ -131,17 +154,30 @@
                             credentials: 'include',
                             body: JSON.stringify({ email, password })
                         });
+                        // Ẩn thông báo đang tải
+                        loadingMessage.style.display = 'none';
 
                         if (response.ok) {
+                            // Hiển thị thông báo thành công
+                            loginSuccessMessage.style.display = 'block';
+                            setTimeout(() => {
+                                // Chuyển hướng đến trang chủ sau 2 giây
+                                window.location.href = '/';
+                            }, 2000);
                             // Cookies are now handled by the server
                             window.location.href = '/';
                         } else {
                             // Handle login failure
                             const errorMessage = await response.text();
-                            alert(errorMessage);
+                            // Hiển thị thông báo thất bại
+                            loginFailMessage.style.display = 'block';
                         }
                     } catch (error) {
                         console.error('Login error:', error);
+                        // Ẩn thông báo đang tải
+                        loadingMessage.style.display = 'none';
+                        // Hiển thị thông báo thất bại nếu có lỗi xảy ra
+                        loginFailMessage.style.display = 'block';
                     }
                 });
             });

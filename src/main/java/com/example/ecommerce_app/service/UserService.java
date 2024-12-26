@@ -67,8 +67,30 @@ public class UserService {
     public User updateUser(Long id, UserDTO userDTO) {
         User user = getUserById(id);
 
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
+        if (userDTO.getEmail() != null && !userDTO.getEmail().isEmpty()) {
+            user.setEmail(userDTO.getEmail());
+        }
+
+        if (userDTO.getUsername() != null && !userDTO.getUsername().isEmpty()) {
+            user.setUsername(userDTO.getUsername());
+        }
+
+        if (userDTO.getAddress() != null && !userDTO.getAddress().isEmpty()) {
+            user.setAddress(userDTO.getAddress());
+        }
+
+        if (userDTO.getPhoneNumber() != null && !userDTO.getPhoneNumber().isEmpty()) {
+            user.setPhoneNumber(userDTO.getPhoneNumber());
+        }
+
+        if (userDTO.getCity() != null && !userDTO.getCity().isEmpty()) {
+            user.setCity(userDTO.getCity());
+        }
+
+        if (userDTO.getCountry() != null && !userDTO.getCountry().isEmpty()) {
+            user.setCountry(userDTO.getCountry());
+        }
+
         // Chỉ cập nhật password nếu có password mới
         if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
             user.setPassword(passwordEncoder.encode(userDTO.getPassword()));

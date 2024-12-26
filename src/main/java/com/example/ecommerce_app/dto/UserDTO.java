@@ -23,6 +23,16 @@ public class UserDTO {
 
     @Size(min = 8, message = "Password must be at least 8 characters")
     private String password; // Used only for registration
+    
+    private String role;
+
     private String address;
-    private String phone;
+
+    private String city;
+    
+    private String country;
+    
+    private String postalCode;
+    
+    private String phoneNumber;
 }

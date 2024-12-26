@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+    <head th:replace="admin/fragments/head :: head">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Quản lý Người dùng - Thương mại Điện tử</title>
+        <!-- Thêm Bootstrap từ CDN -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+
+    <body>
+        <div class="d-flex wrapper">
+            <!-- Sidebar -->
+            <div th:replace="admin/fragments/sidebar :: sidebar" class="sidebar-container"></div>
+
+            <div class="flex-grow-1 main-content">
+                <!-- Navbar -->
+                <nav th:replace="admin/fragments/navbar :: navbar"></nav>
+
+                <!-- Content here -->
+                <div class="p-4 min-vh-100 content">
+                    <div class="container-fluid">
+                        <div class="mb-4">
+                            <h2 class="text-center">Chi tiết người dùng</h2>
+                        </div>
+
+                        <!-- Hiển thị thông tin người dùng (các trường không thể chỉnh sửa) -->
+                        <div class="mb-4 row">
+                            <div class="col-12 col-md-6">
+                                <div class="mb-3">
+                                    <label for="userId" class="form-label">ID</label>
+                                    <span th:text="${user.id}" class="form-control-plaintext" id="userId"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="fullName" class="form-label">Họ tên</label>
+                                    <span th:text="${user.firstName + ' ' + user.lastName}"
+                                        class="form-control-plaintext" id="fullName"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Email</label>
+                                    <span th:text="${user.email}" class="form-control-plaintext" id="email"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="phoneNumber" class="form-label">Số điện thoại</label>
+                                    <span th:text="${user.phoneNumber}" class="form-control-plaintext"
+                                        id="phoneNumber"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="address" class="form-label">Địa chỉ</label>
+                                    <span th:text="${user.address}" class="form-control-plaintext" id="address"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="city" class="form-label">Thành phố</label>
+                                    <span th:text="${user.city}" class="form-control-plaintext" id="city"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="country" class="form-label">Quốc gia</label>
+                                    <span th:text="${user.country}" class="form-control-plaintext" id="country"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="createdAt" class="form-label">Ngày tạo</label>
+                                    <span th:text="${user.createdAt}" class="form-control-plaintext"
+                                        id="createdAt"></span>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="status" class="form-label">Trạng thái</label>
+                                    <span th:text="${user.enabled ? 'Kích hoạt' : 'Khóa'}"
+                                        class="form-control-plaintext" id="status"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Form chỉnh sửa thông tin người dùng (chỉ các trường có thể chỉnh sửa) -->
+                        <div class="row">
+                            <div class="col-12 col-md-8 offset-md-2">
+                                <h3>Cập nhật thông tin người dùng</h3>
+                                <form id="userForm" class="form"
+                                    th:action="@{/api/admin/users/update/{id}(id=${user.id})}" method="post"
+                                    th:object="${user}">
+                                    <!-- Giả lập PUT -->
+                                    <input type="hidden" name="_method" value="PUT" />
+                                    <input type="hidden" name="id" value="${user.id}" />
+
+                                    <div class="mb-3">
+                                        <label for="firstName" class="form-label">Họ</label>
+                                        <input type="text" name="firstName" th:field="*{firstName}" class="form-control"
+                                            id="firstName" />
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="lastName" class="form-label">Tên</label>
+                                        <input type="text" name="lastName" th:field="*{lastName}" class="form-control"
+                                            id="lastName" />
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="phoneNumber" class="form-label">Số điện thoại</label>
+                                        <input type="text" name="phoneNumber" th:field="*{phoneNumber}"
+                                            class="form-control" id="phoneNumber" />
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="address" class="form-label">Địa chỉ</label>
+                                        <input type="text" name="address" th:field="*{address}" class="form-control"
+                                            id="address" />
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="city" class="form-label">Thành phố</label>
+                                        <input type="text" name="city" th:field="*{city}" class="form-control"
+                                            id="city" />
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="country" class="form-label">Quốc gia</label>
+                                        <input type="text" name="country" th:field="*{country}" class="form-control"
+                                            id="country" />
+                                    </div>
+
+                                    <!-- Button Cập nhật -->
+                                    <div class="d-flex justify-content-between">
+                                        <button type="submit" class="btn btn-primary">Cập nhật</button>
+                                        <a href="/admin/users" class="btn btn-secondary">Quay lại</a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Thêm Bootstrap JS và các phụ thuộc -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+
+</html>

@@ -10,18 +10,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.ecommerce_app.model.Category;
+
 import com.example.ecommerce_app.dto.ProductRequestDTO;
 import com.example.ecommerce_app.dto.ProductResponseDTO;
+import com.example.ecommerce_app.dto.UserDTO;
 import com.example.ecommerce_app.model.User;
 import com.example.ecommerce_app.repository.UserRepository;
 import com.example.ecommerce_app.service.ProductService;
+import com.example.ecommerce_app.service.UserService;
 
 import jakarta.validation.Valid;
 
@@ -29,6 +35,8 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/admin")
 public class AdminApiController {
 
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private ProductService productService;
@@ -67,7 +75,7 @@ public class AdminApiController {
 
     @DeleteMapping("/products/delete/{id}")
     public ResponseEntity<Void> deleteProductApi(@PathVariable Long id) {
-        System.out.println("------>controller/admin/products/delete");
+        System.out.println("------>controller/admin/api/products/delete");
         productService.deleteProduct(id);
         return ResponseEntity.ok().build();
     }
@@ -76,10 +84,51 @@ public class AdminApiController {
     @PutMapping("/products/update/{id}")
     public ResponseEntity<?> updateProduct(@PathVariable("id") Long id,
             @ModelAttribute("product") ProductRequestDTO productRequestDTO) throws IOException {
-        System.out.println("------>controller/admin/products/update");
+        System.out.println("------>controller/admin/api/products/update");
         productRequestDTO.setId(id); // Gán id từ URL vào đối tượng productRequestDTO
         ProductResponseDTO updatedProductDTO = productService.updateProduct(id, productRequestDTO);
         return ResponseEntity.ok(updatedProductDTO);
     }
 
+    // Theo dõi khách hàng
+    @GetMapping("/users")
+    public ResponseEntity<List<User>> getAllUsers() {
+        System.out.println("------>controller/admin/api/users");
+        List<User> users = userService.findAll();
+        return ResponseEntity.ok(users);
+    }
+
+    // Xóa khách hàng
+    @DeleteMapping("/users/delete/{id}")
+    public ResponseEntity<Void> deleteUserApi(@PathVariable Long id) {
+        System.out.println("------>controller/admin/api/users/delete");
+        userService.deleteUser(id);
+        return ResponseEntity.ok().build();
+    }
+
+    // Chi tiết khách hàng
+    @GetMapping("/users/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable Long id) {
+        System.out.println("------>controller/admin/api/users/profile");
+        User user = userService.findById(id);
+        return ResponseEntity.ok(user);
+    }
+
+    // Sửa thống tin khách hàng
+    @PutMapping("/users/update/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody UserDTO user) {
+        System.out.println("------>controller/admin/api/users/update");
+        System.out.println("ID: " + id);
+        System.out.println("User: " + user);
+        User updatedUser = userService.updateUser(id, user);
+        return ResponseEntity.ok(updatedUser);
+    }
+
+    // Quản lý danh mục sản phẩm
+    @GetMapping("/categories")
+    public ResponseEntity<List<Category>> getAllCategories() {
+        System.out.println("------>controller/admin/api/categories");
+        List<Category> categories = productService.getAllCategories();
+        return ResponseEntity.ok(categories);
+    }
 }
