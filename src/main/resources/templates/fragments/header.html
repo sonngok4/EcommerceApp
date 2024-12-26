@@ -46,9 +46,12 @@
                                         <ul class="dropdown-menu" aria-labelledby="userDropdown">
                                             <!-- Authenticated user items -->
                                             <div sec:authorize="isAuthenticated()" class="p-1">
-                                                <li class="dropdown-header">Welcome, <span th:text="${#authentication.details}">User</span>!</li>
-                                                <li><a class="dropdown-item" href="/auth/me">Profile</a></li>
+                                                <li class="dropdown-header">Welcome, <span
+                                                        th:text="${#authentication.details}">User</span>!</li>
+                                                <li><a class="dropdown-item" href="/me">Profile</a></li>
                                                 <li><a class="dropdown-item" href="/auth/logout">Logout</a></li>
+                                                <li sec:authorize="hasRole('ROLE_ADMIN')"><a class="dropdown-item"
+                                                        href="/admin/dashboard">Admin Dashboard</a></li>
                                             </div>
 
                                             <!-- Non-authenticated user items -->
@@ -57,9 +60,7 @@
                                                 <li><a class="dropdown-item" href="/auth/login">Login</a></li>
                                             </div>
 
-                                            <div sec:authorize="hasRole('ROLE_ADMIN')">
-                                                <li><a class="dropdown-item" href="/admin/dashboard">Admin Dashboard</a></li>
-                                            </div>
+
                                         </ul>
                                     </div>
                                 </div>

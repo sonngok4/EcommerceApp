@@ -6,17 +6,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 // import org.springframework.data.domain.Page;
 // import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.ecommerce_app.model.Product;
+import com.example.ecommerce_app.model.User;
 import com.example.ecommerce_app.service.ProductService;
+import com.example.ecommerce_app.service.UserService;
 
 @Controller
 @RequestMapping("/")
 public class HomeWebController {
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private ProductService productService;
@@ -30,6 +37,19 @@ public class HomeWebController {
         }
         model.addAttribute("products", products);
         return "pages/index";
+    }
+
+    @GetMapping("/me")
+    public String showProfilePage(Model model, Authentication authentication) {
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String email = userDetails.getUsername(); // username with config for email
+
+        User user = userService.getUserByEmail(email);
+        model.addAttribute("username", user.getUsername());
+        model.addAttribute("user", user);
+        System.out.println("------>controller/auth/me");
+        // Debugging
+        return "pages/profile";
     }
 
     @GetMapping("/about")

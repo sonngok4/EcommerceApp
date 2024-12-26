@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity" layout:decorate="~{layouts/main-layout}">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>My Profile</title>
+    </head>
+
+    <body>
+
+        <div layout:fragment="content" class="container">
+            <!-- Protected Page Example -->
+            <div sec:authorize="isAuthenticated()">
+                <h1>Welcome to Your Profile, <span th:text="${user.username}"></span></h1>
+                <div class="profile-content table">
+                    <table class="table">
+                        <tr>
+                            <th>First Name</th>
+                            <td th:text="${user.firstName}"></td>
+                        </tr>
+                        <tr>
+                            <th>Last Name</th>
+                            <td th:text="${user.lastName}"></td>
+                        </tr>
+                        <tr>
+                            <th>Email</th>
+                            <td th:text="${user.email}"></td>
+                        </tr>
+                        <tr>
+                            <th>Phone Number</th>
+                            <td th:text="${user.phoneNumber}"></td>
+                        </tr>
+                        <tr>
+                            <th>Address</th>
+                            <td th:text="${user.address}"></td>
+                        </tr>
+                        <tr>
+                            <th>City</th>
+                            <td th:text="${user.city}"></td>
+                        </tr>
+                        <tr>
+                            <th>Country</th>
+                            <td th:text="${user.country}"></td>
+                        </tr>
+                        <tr>
+                            <th>Postal Code</th>
+                            <td th:text="${user.postalCode}"></td>
+                        </tr>
+                    </table>
+                </div>
+                <!-- Profile content -->
+            </div>
+            <div sec:authorize="!isAuthenticated()">
+                <p>Please log in to view your profile.</p>
+                <a th:href="@{/auth/login}" class="btn btn-primary">Login</a>
+            </div>
+        </div>
+    </body>
+
+</html>

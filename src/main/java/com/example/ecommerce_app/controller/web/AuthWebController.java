@@ -37,7 +37,7 @@ public class AuthWebController {
         model.addAttribute("user", user);
         System.out.println("------>controller/auth/me");
         // Debugging
-        return "pages/auth/profile";
+        return "pages/profile";
     }
 
     @GetMapping("/register")
